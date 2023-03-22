@@ -71,18 +71,31 @@ Starting point
 
 ## See Sidekicks
 
-User selects from list. User input = 1
+1. Function first gives you a list of sidekicks.
+2. User selects sidekick they want to view.
+3. Information is given on the sidekick
+    - Name, about, bio, ability, and relationships
+4. User clicks enter to return to "home menu"
 
-SELECT * from heroes
+The following code will return sidekick name and their ability.
 
-def get_heroes():
-    query = """
-        SELECT * from heroes
-    """
-    returned_items = execute_query(query).fetchall()
-    for item in returned_items:
-        print(item[1])
-    return returned_items
+'''
+    def get_sidekicks_abilities():
+        query = """
+            SELECT 
+                heroes.name as sidekick,
+                ability_types.name as ability
+            FROM heroes
+            JOIN abilities
+                ON heroes.id = abilities.hero_id
+            JOIN ability_types
+                ON ability_types.id = abilities.ability_type_id;
+        """
+        returned_items = execute_query(query).fetchall()
+        for item in returned_items:
+            print(item[1])
+        return returned_items
+'''
 
 (also add about_me, abilities, and relationships)
 
@@ -92,5 +105,96 @@ User selects from list. User input = 2
 
 SELECT * FROM HEROES
 
+heroes are listed by number
 
+user inputs number associated with hero
+
+Hero information - about_me, abilities, and relationships is shown
+
+def select_hero():
+    query = """
+        SELECT * from heroes
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_items:
+        print(item[1])
+    return returned_items
+
+def learn_about_hero(hero):
+    query = """
+
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_items:
+        print(item[1])
+    return returned_items
+
+## Update Hero
+
+User select from menu list. User selects 3.
+
+Q: What hero would you like to update?
+Q: What would you like to update?
+    - Name
+    - Ability
+    - About
+    - Relationship
+
+def update_hero():
+    query = """
+
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_items:
+        print(item[1])
+    return returned_items
+
+## Delete a hero
+
+User selects from menu list. User selects 4.
+
+Q: Which here would you like to delete?
+
+User selects hero
+
+def delete_hero():
+    query = """
+
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_item:
+        print(item[1])
+    return returned_items
+
+## Add hero
+
+## Add ability
+
+
+
+
+--------------------------
+
+Adding new hero
+
+INSERT INTO heroes (param1, param2)
+VALUES (input1, input2)
+
+user will need to supply the inputs and the def will need to take them as params?
+
+To input values with python:
+
+hero_name = input("Who is the hero?")
+to test it print("Hero name: " + hero_name)
+
+hero_about = input("Tell me about " + hero_name + "?")
+to test it print("Hero about: " + hero_about)
+
+
+so VALUES will be:
+VALUES(hero_name, hero_about)
+
+
+to get these values you must first have user select that they want to add a hero from a
+menu list. This must be displayed first. upon selection of adding a character user will be prompted with inputs. Once they hit enter the above code will run thus updating the heroes table. 
 

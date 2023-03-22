@@ -42,7 +42,7 @@ def execute_query(query, params=None):
 #     query = """
 #         SELECT * from patients
 #     """
-#     returned_items = execute_query(query).fetchall
+#     returned_items = execute_query(query).fetchall()
 #     for item in returned_items:
 #         print(item[1])
 #     return returned_items
