@@ -2,14 +2,10 @@ from database.db_connection import execute_query
 
 
 
+################### VIEW HERO ##########################
+
 def get_heroes_list():
-    query = """
-        SELECT *
-        FROM heroes
-    """
-    returned_items = execute_query(query).fetchall()
-    for item in returned_items:
-        print(f"{item[0]}.  {item[1]}")
+    view_heroes()
     hero_number = input("Which hero do you want to view? ")
     get_hero(hero_number)
 
@@ -19,13 +15,14 @@ def get_hero(num):
             heroes.name as sidekick,
             heroes.about_me as about,
             heroes.biography as bio,
-            ability_types.name as ability
+            STRING_AGG(ability_types.name, ', ') as ability
         FROM heroes
         JOIN abilities
             ON heroes.id = abilities.hero_id
         JOIN ability_types
             ON ability_types.id = abilities.ability_type_id
-        WHERE heroes.id = {num};
+        WHERE heroes.id = '{num}'
+        GROUP BY sidekick, about, bio;
     """
     returned_items = execute_query(query).fetchall()
     for item in returned_items:
@@ -35,7 +32,108 @@ def get_hero(num):
         Bio: {item[2]}
         Ability: {item[3]}
         """)
-    return returned_items
+    view_another_hero()
+
+def view_another_hero():
+    view_another = input("Would you like to view another hero? y/n ")
+    if view_another == "y":
+        get_heroes_list()
+    elif view_another == "n":
+        main_menu()
+    else:
+        print("Please enter valid response.")
+
+################### ADD HERO ##########################        
+
+def get_sidekick_info():
+    sidekick_name = input("What's the sidekicks name? ")
+    sidekick_about = input(f"What's something interesting about {sidekick_name}?")
+    sidekick_bio = input(f"What's {sidekick_name}'s story?")
+    add_hero(sidekick_name, sidekick_about, sidekick_bio)
+
+def add_hero(name, about, bio):
+    query = f"""
+        INSERT INTO heroes (name, about_me, biography)
+        VALUES ('{name}', '{about}', '{bio}')
+    """
+    execute_query(query)#.fetchall()
+    get_sidekick_ability(name)
+
+def get_sidekick_ability(name):
+    view_abilities()    
+    query = f""" 
+        SELECT id
+        FROM heroes
+        WHERE name = '{name}';
+    """
+    hero_num = execute_query(query).fetchall()
+    abil = input(f"What's {name}'s ability? #")
+    add_hero_ability(abil, hero_num)
+
+def add_hero_ability(ability, num):
+    pass
+    # query = f"""
+    #     INSERT INTO abilities (hero_id, ability_type_id)
+    #     VALUES ({int(num)}, {int(ability)});
+    # """
+    # execute_query(query)
+    # get_heroes_list()
+    
+################### UPDATE HERO ##########################
+
+def pick_hero_to_update():
+    view_heroes()
+    hero_to_update = input("Which hero would you like to update? #")
+    items_to_update()
+    what_to_update = input("What would you like to update? ")
+
+def update_hero(table, value1, conditional):
+    query = f""" 
+        UPDATE table_name
+        SET column1 - value1, column2 = value2, ...
+        WHERE condition;
+    """
+
+
+
+def items_to_update():
+    print("""
+    1. Name
+    2. About Me
+    3. Biography
+    4. Ability
+    """)
+################### DELETE HERO ##########################
+def delete_hero():
+    view_heroes()
+    hero_to_delete = input("Which hero would you like to delete? #")
+    query = f"""
+        DELETE FROM heroes
+        WHERE id = {hero_to_delete};
+    """    
+    execute_query(query)
+    print('Hero has been deleted.')
+    view_heroes()
+
+################### GENERAL ##########################
+
+def view_heroes():
+    query = """
+        SELECT *
+        FROM heroes
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_items:
+        print(f"{item[0]}.  {item[1]}")
+
+def view_abilities():
+    query = f"""
+        SELECT *
+        FROM ability_types
+    """
+    returned_items = execute_query(query).fetchall()
+    for item in returned_items:
+        print(f"{item[0]}.  {item[1]}")
 
 def main_menu():
     app_header()
@@ -51,11 +149,11 @@ def main_menu():
     if menu_answer == "1":
         get_heroes_list()
     elif menu_answer == "2":
-        add_sidekick()
+        get_sidekick_info()
     elif menu_answer == "3":
-        update_sidekick_menu()
+        pick_hero_to_update()
     elif menu_answer == "4":
-        delete_sidekick()
+        delete_hero()
     elif menu_answer == "5":
         add_ability()
     else:
