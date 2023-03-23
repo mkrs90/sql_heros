@@ -56,7 +56,7 @@ def add_hero(name, about, bio):
         INSERT INTO heroes (name, about_me, biography)
         VALUES ('{name}', '{about}', '{bio}')
     """
-    execute_query(query)#.fetchall()
+    execute_query(query)
     get_sidekick_ability(name)
 
 def get_sidekick_ability(name):
@@ -66,18 +66,17 @@ def get_sidekick_ability(name):
         FROM heroes
         WHERE name = '{name}';
     """
-    hero_num = execute_query(query).fetchall()
+    hero_num = execute_query(query).fetchone()
     abil = input(f"What's {name}'s ability? #")
-    add_hero_ability(abil, hero_num)
+    add_hero_ability(abil, hero_num[0])
 
 def add_hero_ability(ability, num):
-    pass
-    # query = f"""
-    #     INSERT INTO abilities (hero_id, ability_type_id)
-    #     VALUES ({int(num)}, {int(ability)});
-    # """
-    # execute_query(query)
-    # get_heroes_list()
+    query = f"""
+        INSERT INTO abilities (hero_id, ability_type_id)
+        VALUES ({int(num)}, {int(ability)});
+    """
+    execute_query(query)
+    get_heroes_list()
     
 ################### UPDATE HERO ##########################
 
@@ -85,15 +84,35 @@ def pick_hero_to_update():
     view_heroes()
     hero_to_update = input("Which hero would you like to update? #")
     items_to_update()
-    what_to_update = input("What would you like to update? ")
+    what_to_update = input("What would you like to update? #")
+    if what_to_update == '1':
+        new_name = input("Enter new name: ")
+        update_hero('heroes', 'name', new_name, hero_to_update, 'id')
+    elif what_to_update == '2':
+        new_about = input("Enter new about: ")
+        update_hero('heroes', 'about_me', new_about, hero_to_update, 'id')
+    elif what_to_update == '3':
+        new_bio = input("Enter new bio: ")
+        update_hero('heroes', 'biography', new_bio, hero_to_update, 'id')
+    elif what_to_update == '4':
+        view_abilities()
+        new_ability = input("Enter new ability #")
+        update_hero('abilities', 'ability_type_id', new_ability, hero_to_update, 'hero_id')
+    elif what_to_update == '5':
+        main_menu()
+    else:
+        print("Please enter valid number")
+        
 
-def update_hero(table, value1, conditional):
+
+def update_hero(table, column, value, conditional, where):
     query = f""" 
-        UPDATE table_name
-        SET column1 - value1, column2 = value2, ...
-        WHERE condition;
+        UPDATE {table}
+        SET {column} = '{value}'
+        WHERE {where} = {conditional};
     """
-
+    execute_query(query)
+    pick_hero_to_update()
 
 
 def items_to_update():
@@ -102,7 +121,10 @@ def items_to_update():
     2. About Me
     3. Biography
     4. Ability
+    5. Return to Main Menu
     """)
+
+    
 ################### DELETE HERO ##########################
 def delete_hero():
     view_heroes()
