@@ -162,6 +162,28 @@ def delete_hero():
         print("Please start over...")
         main_menu()
 
+################### CREATE ABILITY ##########################
+
+def input_ability():
+    os.system('clear')
+    app_header()
+    view_abilities()
+    new_ability = input("What ability would you like to add? ")
+    sure = input(f"Are you sure you want to add {new_ability} to the list of abilities? y/n")
+    if sure == 'y':
+        add_ability(new_ability)
+    else:
+        main_menu()
+
+
+def add_ability(value):
+    query = f"""
+        INSERT INTO ability_types (name)
+        VALUES ('{value}');
+    """
+    execute_query(query)
+    print("Ability has been added.")
+    main_menu()
 
 ################### GENERAL ##########################
 
@@ -193,6 +215,7 @@ def main_menu():
         3. Update sidekick info
         4. Delete a sidekick
         5. Add an ability
+        6. View an ability
     """)
     menu_answer = input("Enter number: ")
     if menu_answer == "1":
@@ -204,7 +227,9 @@ def main_menu():
     elif menu_answer == "4":
         delete_hero()
     elif menu_answer == "5":
-        add_ability()
+        input_ability()
+    elif menu_answer == "6":
+        view_abilities()
     else:
         print("Please enter valid number")
 
