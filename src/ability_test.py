@@ -30,4 +30,18 @@ def add_hero_ability(ability, num):
     # get_heroes_list()
 
 
-get_sidekick_ability("billy bob")
+# get_sidekick_ability("billy bob")
+def on_snap():
+    print("""
+    )      )   (        )          (     
+ ( /(   ( /(   )\ )  ( /(   (      )\ )  
+ )\())  )\()) (()/(  )\())  )\    (()/(  
+((_)\  ((_)\   /(_))((_)\((((_)(   /(_)) 
+  ((_)  _((_) (_))   _((_))\ _ )\ (_))   
+ / _ \ | || | / __| | \| |(_)_\(_)| _ \  
+| (_) || __ | \__ \ | .` | / _ \  |  _/  
+ \___/ |_||_| |___/ |_|\_|/_/ \_\ |_|    
+      Sidekick has been deleted.
+    """)
+
+on_snap()

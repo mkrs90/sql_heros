@@ -1,12 +1,14 @@
 from database.db_connection import execute_query
-
+import os
 
 
 ################### VIEW HERO ##########################
 
 def get_heroes_list():
+    os.system('clear')
+    app_header()
     view_heroes()
-    hero_number = input("Which hero do you want to view? ")
+    hero_number = input("Which sidekick do you want to view? ")
     get_hero(hero_number)
 
 def get_hero(num):
@@ -35,7 +37,7 @@ def get_hero(num):
     view_another_hero()
 
 def view_another_hero():
-    view_another = input("Would you like to view another hero? y/n ")
+    view_another = input("Would you like to view another sidekick? y/n ")
     if view_another == "y":
         get_heroes_list()
     elif view_another == "n":
@@ -46,6 +48,8 @@ def view_another_hero():
 ################### ADD HERO ##########################        
 
 def get_sidekick_info():
+    os.system('clear')
+    app_header()
     sidekick_name = input("What's the sidekicks name? ")
     sidekick_about = input(f"What's something interesting about {sidekick_name}?")
     sidekick_bio = input(f"What's {sidekick_name}'s story?")
@@ -81,8 +85,10 @@ def add_hero_ability(ability, num):
 ################### UPDATE HERO ##########################
 
 def pick_hero_to_update():
+    os.system('clear')
+    app_header()
     view_heroes()
-    hero_to_update = input("Which hero would you like to update? #")
+    hero_to_update = input("Which sidekick would you like to update? #")
     items_to_update()
     what_to_update = input("What would you like to update? #")
     if what_to_update == '1':
@@ -124,18 +130,38 @@ def items_to_update():
     5. Return to Main Menu
     """)
 
-    
+
 ################### DELETE HERO ##########################
 def delete_hero():
+    os.system('clear')
+    app_header()
     view_heroes()
-    hero_to_delete = input("Which hero would you like to delete? #")
+    hero_to_delete = input("Which sidekick would you like to delete? #")
     query = f"""
         DELETE FROM heroes
         WHERE id = {hero_to_delete};
     """    
     execute_query(query)
-    print('Hero has been deleted.')
-    view_heroes()
+    print("""
+    )      )   (        )          (     
+ ( /(   ( /(   )\ )  ( /(   (      )\ )  
+ )\())  )\()) (()/(  )\())  )\    (()/(  
+((_)\  ((_)\   /(_))((_)\((((_)(   /(_)) 
+  ((_)  _((_) (_))   _((_))\ _ )\ (_))   
+ / _ \ | || | / __| | \| |(_)_\(_)| _ \  
+| (_) || __ | \__ \ | .` | / _ \  |  _/  
+ \___/ |_||_| |___/ |_|\_|/_/ \_\ |_|    
+      Sidekick has been deleted.
+    """)
+    return_to_menu = input("Would you like to return to the main menu? y/n ")
+    if return_to_menu == 'y':
+        main_menu()
+    elif return_to_menu == 'n':
+        view_heroes()
+    else:
+        print("Please start over...")
+        main_menu()
+
 
 ################### GENERAL ##########################
 
@@ -158,6 +184,7 @@ def view_abilities():
         print(f"{item[0]}.  {item[1]}")
 
 def main_menu():
+    os.system('clear')
     app_header()
     print("""
         What would you like to do?
@@ -193,19 +220,11 @@ def app_header():
     """)
 
 def start_it():
+    os.system('clear')
     app_header()
     start = input("Press enter to get started!")
     if start == "":
         main_menu() 
-
-
-
-# def create_new_hero(name, about_me):
-#     query = """
-#         INSERT INTO heroes (name, about_me)
-#         VALUES (%s, %s)
-#         """
-#     execute_query(query, (name, about_me))
 
 start_it()
 

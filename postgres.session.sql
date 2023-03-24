@@ -1,8 +1,8 @@
 -- INSERT INTO abilities (hero_id, ability_type_id)
--- VALUES (13, 6);
+-- VALUES (19, 2);
 
-SELECT *
-FROM heroes;
+-- SELECT *
+-- FROM heroes;
 
 -- SELECT
 --     heroes.name as sidekick,
